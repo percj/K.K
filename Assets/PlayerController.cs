@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
     [SerializeField] GameObject target;
+    [SerializeField] TimerController timer;
+    [SerializeField] GameObject ko;
     private bool isGround;
     public float damage;
     public float speed;
@@ -63,6 +65,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("Walk", false);
             animator.SetBool("Attack", false);
+            timer.finish = true;
+            ko.SetActive(true);
         }
 
 
@@ -71,30 +75,12 @@ public class PlayerController : MonoBehaviour
     {
         if(CanHit)
         {
-            Debug.Log("Vurdu");
             var rand = Random.Range(-7, 7);
             var health = target.GetComponent<healthController>();
             health.decreaseHealth(damage + rand);
 
             if (health.isDeath)
-                isFinish = true;
-        }
-    }
-
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.transform.tag == "Enemy")
-        {
-            inRange = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.transform.tag == "Enemy")
-        {
-            inRange = false;
+                isFinish = true; 
         }
     }
 
@@ -103,6 +89,10 @@ public class PlayerController : MonoBehaviour
         if (collision.transform.tag == "Ground")
         {
             isGround = true;
+        }
+        if(collision.transform.tag == "Enemy")
+        {
+            CanHit = true;
         }
 
 
@@ -113,6 +103,11 @@ public class PlayerController : MonoBehaviour
         {
             isGround = false;
         }
+        if (collision.transform.tag == "Enemy")
+        {
+            CanHit = false;
+        }
+
     }
 
 }

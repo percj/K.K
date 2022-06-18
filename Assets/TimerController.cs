@@ -5,17 +5,21 @@ using UnityEngine;
 
 public class TimerController : MonoBehaviour
 {
+    public bool finish;
     [SerializeField] TextMeshProUGUI timer;
     int StartTimer = 60;
 
     void Update()
     {
-        if(StartTimer-Time.deltaTime <= 0)
+        if(!finish)
         {
-            Time.timeScale = 0f;
-        }
-        else
-            timer.text = (StartTimer - (int)Time.time).ToString();
+            if (StartTimer - Time.deltaTime <= 0)
+            {
+                Time.timeScale = 0f;
+            }
+            else
+                timer.text = (StartTimer - (int)Time.time).ToString();
 
+        }
     }
 }

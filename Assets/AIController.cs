@@ -13,6 +13,8 @@ public class AIController : MonoBehaviour
     public Quaternion quaternion;
     public float speed;
     [SerializeField] float damage;
+    [SerializeField] GameObject ko;
+    [SerializeField] TimerController timer;
 
     bool inRange;
     bool isFinish;
@@ -54,6 +56,8 @@ public class AIController : MonoBehaviour
         {
             anim.SetBool("Walk", false);
             anim.SetBool("Attack", false);
+            timer.finish = true;
+            ko.SetActive(true);
         }
 
     }
