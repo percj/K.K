@@ -8,7 +8,7 @@ public class healthController : MonoBehaviour
     [SerializeField] float maxHealth;
     [SerializeField] Animator anim;
     [HideInInspector] public float currHealth;
-
+    [SerializeField] GameObject fireEffect;
     [SerializeField] TMPro.TextMeshProUGUI HealthText;
     [SerializeField] Image filler;
     public bool isDeath;
@@ -16,6 +16,23 @@ public class healthController : MonoBehaviour
     private void Start()
     {
         currHealth = maxHealth;
+    }
+
+    public void fireDamage(float damage)
+    {
+        StartCoroutine(fire(damage));
+    }
+    IEnumerator fire(float damage)
+    {
+        fireEffect.SetActive(true);
+        yield return new WaitForSeconds(1);
+        decreaseHealth((int)(damage / 3));
+        yield return new WaitForSeconds(1);
+        decreaseHealth((int)(damage / 3));
+        yield return new WaitForSeconds(1);
+        decreaseHealth((int)(damage / 3));
+        yield return null;
+        fireEffect.SetActive(false);
     }
 
     private void Update()
