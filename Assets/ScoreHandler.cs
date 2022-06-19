@@ -38,8 +38,9 @@ public class ScoreHandler : MonoBehaviour
     {
         writed = true;
         var Score= (timer.StartTimer - (int)Time.time) * Level;
-        text.text += Score;
         if(text2 !=null)
            text2.text += Score;
+        else
+            text.text += Score;
     }
 }
