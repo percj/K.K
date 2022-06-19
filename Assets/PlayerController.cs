@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,16 +8,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
     [SerializeField] GameObject target;
-    [SerializeField] TimerController timer;
-    [SerializeField] GameObject ko;
+    [SerializeField] TextMeshProUGUI Name;
     private bool isGround;
     public float damage;
     public float speed;
-    bool isFinish;
+    public bool isFinish;
     bool inRange;
     int counter=1;
-
     public bool CanHit { get; internal set; }
+
+    private void Start()
+    {
+        Name.text = PlayerPrefs.GetString("PlayerName");
+    }
 
     void Update()
     {
@@ -35,12 +39,6 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("Attack", false);
             }
 
-            /*if (Input.GetKeyDown(KeyCode.W) && isGround)
-            {
-                rb.AddForce(transform.up * 700);
-
-
-            }*/
             if (Input.GetKey(KeyCode.D))
             {
                 gameObject.transform.localRotation = Quaternion.LookRotation(Vector3.right);
@@ -65,8 +63,6 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("Walk", false);
             animator.SetBool("Attack", false);
-            timer.finish = true;
-            ko.SetActive(true);
         }
 
 

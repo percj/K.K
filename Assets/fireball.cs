@@ -19,9 +19,12 @@ public class fireball : MonoBehaviour
             health.fireDamage(damage);
             Destroy(gameObject);
         }
-        else
+        else if(collision.gameObject.tag == "Ground")
         {
-            Instantiate(explotion, transform);
+           var a = Instantiate(explotion);
+            a.transform.position = transform.position;
+            a.transform.parent = collision.gameObject.transform;
+            a = null;
             Destroy(gameObject);
         }
     }

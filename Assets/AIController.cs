@@ -13,11 +13,9 @@ public class AIController : MonoBehaviour
     public Quaternion quaternion;
     public float speed;
     [SerializeField] float damage;
-    [SerializeField] GameObject ko;
-    [SerializeField] TimerController timer;
 
     bool inRange;
-    bool isFinish;
+    public bool isFinish;
 
     [SerializeField] Transform Player;
 
@@ -28,7 +26,6 @@ public class AIController : MonoBehaviour
 
     void Start()
     {
-
         Physics2D.queriesStartInColliders = false;
         target = Player;
         anim = GetComponent<Animator>();
@@ -56,8 +53,6 @@ public class AIController : MonoBehaviour
         {
             anim.SetBool("Walk", false);
             anim.SetBool("Attack", false);
-            timer.finish = true;
-            ko.SetActive(true);
         }
 
     }
@@ -78,7 +73,6 @@ public class AIController : MonoBehaviour
     {
         if (inRange)
         {
-            Debug.Log("Vurdu");
             var rand = Random.Range(-7, 7);
             var health = Player.GetComponent<healthController>();
             health.decreaseHealth(damage + rand);

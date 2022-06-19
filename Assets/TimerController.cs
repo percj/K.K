@@ -7,7 +7,12 @@ public class TimerController : MonoBehaviour
 {
     public bool finish;
     [SerializeField] TextMeshProUGUI timer;
-    int StartTimer = 60;
+    public int StartTimer = 60;
+    private void Start()
+    {
+        StartTimer += (int)Time.time;
+    }
+
 
     void Update()
     {

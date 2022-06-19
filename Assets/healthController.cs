@@ -10,12 +10,22 @@ public class healthController : MonoBehaviour
     [HideInInspector] public float currHealth;
     [SerializeField] GameObject fireEffect;
     [SerializeField] TMPro.TextMeshProUGUI HealthText;
+
+    internal void damageWithSpear(float damage)
+    {
+        throw new System.NotImplementedException();
+    }
+
     [SerializeField] Image filler;
     public bool isDeath;
-    
+    [SerializeField] TimerController timer;
+    [SerializeField] GameObject damageVFX;
+    private bool burning;
+    gamemanager manager;
     private void Start()
     {
         currHealth = maxHealth;
+        manager = FindObjectOfType<gamemanager>();
     }
 
     public void fireDamage(float damage)
@@ -24,15 +34,20 @@ public class healthController : MonoBehaviour
     }
     IEnumerator fire(float damage)
     {
-        fireEffect.SetActive(true);
-        yield return new WaitForSeconds(1);
-        decreaseHealth((int)(damage / 3));
-        yield return new WaitForSeconds(1);
-        decreaseHealth((int)(damage / 3));
-        yield return new WaitForSeconds(1);
-        decreaseHealth((int)(damage / 3));
-        yield return null;
-        fireEffect.SetActive(false);
+        if(!burning)
+        {
+            burning = true;
+            fireEffect.SetActive(true);
+            yield return new WaitForSeconds(1);
+            decreaseHealth((int)(damage / 3));
+            yield return new WaitForSeconds(1);
+            decreaseHealth((int)(damage / 3));
+            yield return new WaitForSeconds(1);
+            decreaseHealth((int)(damage / 3));
+            yield return null;
+            fireEffect.SetActive(false);
+            burning = false;
+        }
     }
 
     private void Update()
@@ -46,18 +61,29 @@ public class healthController : MonoBehaviour
 
     public void decreaseHealth(float decreasehealth)
     {
-        if (currHealth - decreasehealth >= 0)
+        if(!isDeath && !manager.isfinis)
         {
-            currHealth -= decreasehealth;
-            if (currHealth == 0)
+            if (currHealth - decreasehealth >= 0)
+            {
+                currHealth -= decreasehealth;
+                StartCoroutine(dmgVFX());
+                if (currHealth == 0)
+                {
+                    death();
+                }
+            }
+            else
             {
                 death();
             }
         }
-        else
-        {
-            death();
-        }
+       
+    }
+    IEnumerator dmgVFX()
+    {
+        damageVFX.SetActive(true);
+        yield return new WaitForSeconds(1);
+        damageVFX.SetActive(false);
     }
 
     void death()
@@ -68,11 +94,10 @@ public class healthController : MonoBehaviour
         isDeath = true;
         anim.SetTrigger("Dead");
         anim.SetInteger("DeadRand",Random.Range(0,1));
-        GetComponent<CapsuleCollider>().enabled = false;
         var player = GetComponent<PlayerController>();
         var AI = GetComponent<AIController>();
         if (player != null) player.enabled = false;
         if (AI != null) AI.enabled = false;
-             
+        manager.finishGame();
     }
 }
